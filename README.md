@@ -1,6 +1,10 @@
 # connect_four
 A command line game of connect four as part of The Odin Project
 
+METHODS
+Board.valid_column?
+    This method is not easily dynamic to changing the size of the board. The valid columns are hard coded. Maybe I could use an instance variable of board that populates and array of valid column options once the board object is initialized.
+
 TESTS
 Board
     #approved_choice?
