@@ -38,4 +38,41 @@ describe Board do
       end
     end
   end
+
+  describe '#valid_column?' do
+    context 'when choice is a valid number' do
+      it 'returns true' do
+        valid_input = '2'
+        expect(board.valid_column?(valid_input)).to be true
+      end
+    end
+
+    context 'when choice is a letter' do
+      it 'returns false' do
+        not_num_input = 'a'
+        expect(board.valid_column?(not_num_input)).to be false
+      end
+    end
+
+    context 'when choice is a symbol' do
+      it 'returns false' do
+        not_num_input = '/'
+        expect(board.valid_column?(not_num_input)).to be false
+      end
+    end
+
+    context 'when choice is invalid and more than one character' do
+      it 'returns false' do
+        not_num_input = '4jkd'
+        expect(board.valid_column?(not_num_input)).to be false
+      end
+    end
+
+    context 'when choice is a number, but not a valid column' do
+      it 'returns false' do
+        not_num_input = '730'
+        expect(board.valid_column?(not_num_input)).to be false
+      end
+    end
+  end
 end
