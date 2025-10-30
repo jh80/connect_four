@@ -22,4 +22,21 @@ class Board
     return false unless available_column?(choice)
     true
   end
+
+  def print_board
+    i = 6
+    while i >= 0 do
+      @columns.each do |column_id, column|
+        print column[i]
+        print ' ' unless column_id == '7' 
+      end
+      puts ''
+      i -= 1
+    end
+    @columns.each do |column_id, column|
+      print column_id
+      print ' ' unless column_id == '7'
+    end
+    puts ''
+  end
 end
