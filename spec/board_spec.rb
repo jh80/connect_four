@@ -75,4 +75,55 @@ describe Board do
       end
     end
   end
+
+  describe '#available_column?' do
+    before do
+      allow(board).to receive(:blank_mark).and_return('❍')
+    end
+    context 'when a column is empty' do
+      before do
+        allow(board).to receive(:columns).and_return(Hash[
+          '1', Array.new(6, '❍'), '2', Array.new(6, '❍'), 
+          '3', Array.new(6, '❍'), '4', Array.new(6, '❍'), 
+          '5', Array.new(6, '❍'), '6', Array.new(6, '❍'), 
+          '7', Array.new(6, '❍')])
+      end
+      it 'returns true' do
+        expect(board.available_column?('5')).to be true
+      end
+    end
+
+    context 'when a column is half full' do
+      before do
+        allow(board).to receive(:columns).and_return(Hash[
+          '1', Array.new(6, '❍'), '2', Array.new(6, '❍'), 
+          '3', Array.new(6, '❍'), '4', Array.new(6, '❍'), 
+          '5', Array.new(6, '❍'), '6', Array.new(6, '❍'), 
+          '7', ['✩', '✩' , '✩', '❍', '❍', '❍']])
+      end
+      it 'returns true' do
+        expect(board.available_column?('7')).to be true
+      end
+    end
+
+    context 'when a column is full' do
+      before do
+        # Testing column '2', and column '2' is full
+        allow(board).to receive(:columns).and_return(Hash[
+          '1', Array.new(6, '❍'), '2', ['✩', '✩' , '✩', '✩', '✩', '✩'], 
+          '3', Array.new(6, '❍'), '4', Array.new(6, '❍'), 
+          '5', Array.new(6, '❍'), '6', Array.new(6, '❍'), 
+          '7', Array.new(6, '❍')])     
+      end
+      it 'returns false' do
+        expect(board.available_column?('2')).to be false
+      end
+    end
+
+    context 'when entered column is not a viable column' do
+      it 'returns false / or an error' do
+        expect(board.available_column?('ha')).to be false
+      end
+    end
+  end
 end
