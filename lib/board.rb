@@ -23,6 +23,15 @@ class Board
     true
   end
 
+  def place_choice(choice, player)
+    for i in (0..5)
+      if columns[choice][i] == '❍'
+        columns[choice][i] = player.mark
+        break
+      end
+    end
+  end
+
   def print_board
     i = 6
     while i >= 0 do

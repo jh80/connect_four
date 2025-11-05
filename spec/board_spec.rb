@@ -1,9 +1,12 @@
 # frozen_string_literal: true
 
 require_relative '../lib/board'
+require_relative '../lib/player'
 
 describe Board do
-  subject(:board) {described_class.new}
+  subject(:board) { described_class.new }
+  let(:player1) { instance_double(Player, mark: '✩') }
+  let(:player2) { instance_double(Player, mark: '✭')}
 
   describe '#approved_choice?' do
     context 'when player pick valid and available' do
@@ -123,6 +126,93 @@ describe Board do
     context 'when entered column is not a viable column' do
       xit 'returns false / or an error' do
         expect(board.available_column?('ha')).to be false
+      end
+    end
+  end
+
+  describe '#place_choice' do
+    context 'when choice is an empty column' do
+      before do
+        allow(board).to receive(:columns).and_return(Hash[
+          '1', Array.new(6, '❍'), '2', ['✩', '✩' , '✩', '✩', '✩', '✩'], 
+          '3', Array.new(6, '❍'), '4', Array.new(6, '❍'), 
+          '5', Array.new(6, '❍'), '6', Array.new(6, '❍'), 
+          '7', Array.new(6, '❍')])
+      end
+      it 'changes the bottom slot in choice column' do
+        choice = '3'
+        expect { board.place_choice(choice, player1) }.to change {board.columns[choice][0]}.from('❍').to('✩')
+      end
+
+      it 'does not change above bottom slot in choice column' do
+        choice = '3'
+        expect { board.place_choice(choice, player1) }.not_to change {board.columns[choice][1..5]}
+      end
+
+      it 'mark matches player mark' do
+        choice = '3'
+        board.place_choice(choice, player1)
+        expect(board.columns[choice][0]).to eq(player1.mark)
+      end
+    end
+
+    context 'when choice is a half full column' do
+      before do
+        allow(board).to receive(:columns).and_return(Hash[
+          '1', Array.new(6, '❍'), '2', ['✩', '✩' , '✩', '❍', '❍', '❍'], 
+          '3', Array.new(6, '❍'), '4', Array.new(6, '❍'), 
+          '5', Array.new(6, '❍'), '6', Array.new(6, '❍'), 
+          '7', Array.new(6, '❍')])
+      end
+
+      it 'changes the 4th slot in choice column' do
+        choice = '2'
+        expect { board.place_choice(choice, player2) }.to change{ board.columns[choice][3] }.from('❍').to('✭')
+      end
+
+      it 'does not change slots less than 4th slot of choice column' do
+        choice = '2'
+        expect { board.place_choice(choice, player2) }.not_to change{ board.columns[choice][0...3] }
+      end
+
+      it 'does not change slots more than 4th slot of choice column' do
+        choice = '2'
+        expect { board.place_choice(choice, player2) }.not_to change { board.columns[choice][4..5] }
+      end
+    end
+
+    context 'when choice is one from full column (with mixed tiles)' do
+      before do
+        allow(board).to receive(:columns).and_return(Hash[
+          '1', Array.new(6, '❍'), '2', Array.new(6, '❍'), 
+          '3', Array.new(6, '❍'), '4', Array.new(6, '❍'), 
+          '5', Array.new(6, '❍'), '6', Array.new(6, '❍'), 
+          '7', ['✭', '✩' , '✩', '✭', '✭', '❍']])
+      end
+
+      it 'changes the last slot in the column' do
+        choice = '7'
+        expect { board.place_choice(choice, player2) }.to change{ board.columns[choice][5] }.from('❍').to('✭')
+      end
+
+      it 'does not change slots below the last slot' do
+        choice = '7'
+        expect { board.place_choice(choice, player2) }.not_to change{ board.columns[choice][0...5] }
+      end
+    end
+
+    context 'when choice is a full column' do
+      before do
+        allow(board).to receive(:columns).and_return(Hash[
+          '1', Array.new(6, '❍'), '2', Array.new(6, '❍'), 
+          '3', Array.new(6, '❍'), '4', Array.new(6, '❍'), 
+          '5', Array.new(6, '❍'), '6', Array.new(6, '❍'), 
+          '7', ['✭', '✩' , '✩', '✭', '✭', '✩']])
+      end
+      
+      it 'does not change any slots' do
+        choice = '7'
+        expect { board.place_choice(choice, player2) }.not_to change { board.columns[choice] }
       end
     end
   end
