@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'pry-byebug'
+
 class Board
   attr_reader :blank_mark, :columns
 
@@ -32,6 +34,12 @@ class Board
     end
   end
 
+  def winner?(player)
+    return true if vertical_win?(player)
+    return true if horizontal_win?(player)
+    false
+  end
+
   def print_board
     i = 6
     while i >= 0 do
@@ -47,5 +55,29 @@ class Board
       print ' ' unless column_id == '7'
     end
     puts ''
+  end
+
+  private
+
+  def vertical_win?(player)
+    columns.each do |col_num, col_slots|
+      count = 0
+      for i in (0..5) 
+        col_slots[i] == player.mark ? count += 1 : count = 0
+        return true if count == 4
+      end
+    end
+    return false
+  end
+
+  def horizontal_win?(player)
+    for i in (0..5)
+      count = 0
+      columns.each_value do |column|
+        column[i] == player.mark ? count +=1 : count = 0
+        return true if count == 4
+      end
+    end
+    return false
   end
 end
