@@ -347,4 +347,48 @@ describe Board do
       end
     end
   end
+
+  context '#filled?' do
+    context 'when board is full' do
+      before do
+        allow(board).to receive(:columns).and_return(Hash[
+          '1', ['✩', '✩' , '✩', '✭', '✭', '✭'], '2', ['✭', '✭' , '✭', '✩', '✩', '✩'], 
+          '3', ['✩', '✩' , '✩', '✭', '✭', '✭'], '4', ['✭', '✭' , '✭', '✩', '✩', '✩'], 
+          '5', ['✩', '✩' , '✩', '✭', '✭', '✭'], '6', ['✭', '✭' , '✭', '✩', '✩', '✩'], 
+          '7', ['✩', '✩' , '✩', '✭', '✭', '✭']])
+      end
+
+      it 'returns true' do
+        expect(board.filled?).to eq(true)
+      end
+    end
+
+    context 'when board is one from full' do
+      before do
+        allow(board).to receive(:columns).and_return(Hash[
+          '1', ['✩', '✩' , '✩', '✭', '✭', '✭'], '2', ['✭', '✭' , '✭', '✩', '✩', '✩'], 
+          '3', ['✩', '✩' , '✩', '✭', '✭', '✭'], '4', ['✭', '✭' , '✭', '✩', '✩', '✩'], 
+          '5', ['✩', '✩' , '✩', '✭', '✭', '✭'], '6', ['✭', '✭' , '✭', '✩', '✩', '✩'], 
+          '7', ['✩', '✩' , '✩', '✭', '✭', '❍']])
+      end
+
+      it 'returns false' do
+        expect(board.filled?).to eq(false)
+      end
+    end
+
+    context 'when board is empty' do
+      before do
+        allow(board).to receive(:columns).and_return(Hash[
+          '1', ['❍', '❍', '❍', '❍', '❍', '❍'], '2', ['❍', '❍', '❍', '❍', '❍', '❍'], 
+          '3', ['❍', '❍', '❍', '❍', '❍', '❍'], '4', ['❍', '❍', '❍', '❍', '❍', '❍'], 
+          '5', ['❍', '❍', '❍', '❍', '❍', '❍'], '6', ['❍', '❍', '❍', '❍', '❍', '❍'], 
+          '7', ['❍', '❍', '❍', '❍', '❍', '❍']])
+      end
+
+      it 'returns false' do
+        expect(board.filled?).to eq(false)
+      end
+    end
+  end
 end

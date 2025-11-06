@@ -41,6 +41,13 @@ class Board
     false
   end
 
+  def filled?
+    columns.each_value do |column|
+      return false if column[5] == blank_mark
+    end
+    true
+  end
+
   def print_board
     i = 6
     while i >= 0 do
