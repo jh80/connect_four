@@ -37,6 +37,7 @@ class Board
   def winner?(player)
     return true if vertical_win?(player)
     return true if horizontal_win?(player)
+    return true if diagonal_win?(player)
     false
   end
 
@@ -79,5 +80,31 @@ class Board
       end
     end
     return false
+  end
+
+  def diagonal_win?(player)
+    # Search for 4 consecutive player marks going diagonal up L and R from each slot
+    for i in (0..5)
+      columns.each do |col_id, column|
+        return true if cont_diag_from_here?(col_id.to_i, i, -1, player.mark) # Search diagonal going left
+        return true if cont_diag_from_here?(col_id.to_i, i, 1, player.mark) # Search diagonal going right
+      end 
+    end
+    return false
+  end
+
+
+  def cont_diag_from_here?(col, i, x_move, mark)
+    count = 0
+    until i > 5 || col < 1 || col > 7 do
+      if columns[col.to_s][i] == mark
+        count += 1
+        return true if count == 4
+      else
+        return false
+      end
+      i += 1
+      col += x_move
+    end
   end
 end
