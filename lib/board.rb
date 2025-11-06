@@ -106,5 +106,6 @@ class Board
       i += 1
       col += x_move
     end
+    false
   end
 end
