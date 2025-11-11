@@ -10,7 +10,7 @@ class Board
     @columns = Hash['1', Array.new(6, @blank_mark), '2', Array.new(6, @blank_mark), '3', Array.new(6, @blank_mark), '4', Array.new(6, @blank_mark), '5', Array.new(6, @blank_mark), '6', Array.new(6, @blank_mark), '7', Array.new(6, @blank_mark)]
   end
   def valid_column?(choice)
-    valid_cols = ['1', '2', '3', '4', '5', '6', '7']
+    valid_cols = self.columns.keys
     return true if valid_cols.include?(choice)
     return false
   end
