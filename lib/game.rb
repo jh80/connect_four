@@ -2,7 +2,7 @@
 
 class Game
   def initialize
-    @board = nil
+    @board = Board.new
   end
 
   def player_input

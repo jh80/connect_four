@@ -146,4 +146,24 @@ describe Game do
       end
     end
   end
+
+  describe '#take_turn' do
+    subject(:game_turn) { described_class.new }
+    # let(:board) { instance_double(Board) }
+    let(:player_t) { instance_double(Player) }
+
+    before do
+      allow(game_turn.instance_variable_get(:@board)).to receive(:place_choice)
+      allow(game_turn.instance_variable_get(:@board)).to receive(:print_board)
+      allow(game_turn).to receive(:player_input).and_return('3')
+    end
+    it 'place_choice is called on an instance of Board' do
+      expect(game_turn.instance_variable_get(:@board)).to receive(:place_choice).once
+      game_turn.take_turn(player_t)
+    end
+    it 'print_board is called on an instance of Board' do
+      expect(game_turn.instance_variable_get(:@board)).to receive(:print_board).once
+      game_turn.take_turn(player_t)
+    end
+  end
 end
