@@ -19,4 +19,10 @@ class Game
       end
     end
   end
+
+  def take_turn(player)
+    choice = player_input
+    @board.place_choice(choice, player)
+    @board.print_board
+  end
 end
