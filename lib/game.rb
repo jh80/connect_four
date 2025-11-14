@@ -2,7 +2,7 @@
 
 class Game
   def initialize
-    @board = nil
+    @board = Board.new
   end
 
   def player_input
@@ -18,5 +18,11 @@ class Game
         puts 'There is no room in this column, pick a different one' 
       end
     end
+  end
+
+  def take_turn(player)
+    choice = player_input
+    @board.place_choice(choice, player)
+    @board.print_board
   end
 end
