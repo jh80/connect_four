@@ -166,4 +166,36 @@ describe Game do
       game_turn.take_turn(player_t)
     end
   end
+
+  describe '#rotate_turns_til_winner' do
+    subject(:game_rotate) { described_class.new }
+    let(:player1) {instance_double(Player)}
+    let(:player2) {instance_double(Player)}
+    let(:players) { [player1, player2] }
+
+    before do
+      allow(game_rotate).to receive(:take_turn).with(player1)
+      allow(game_rotate).to receive(:take_turn).with(player2)
+      allow(game_rotate.instance_variable_get(:@board)).to receive(:winner?).and_return(false, false, false, false, false, false, true)
+    end
+
+    context 'when player2 took 3 turns and player1 took for 4 turns and wins' do
+      it 'calls take_turn 7 times' do
+        expect(game_rotate).to receive(:take_turn).exactly(7).times
+        game_rotate.rotate_turns_til_winner(players)
+      end
+      it 'calls take_turn with player1 4 times' do
+        expect(game_rotate).to receive(:take_turn).with(player1).exactly(4).times
+        game_rotate.rotate_turns_til_winner(players)
+      end
+      it 'calls take_turn with player2 3 times' do
+        expect(game_rotate).to receive(:take_turn).with(player2).exactly(3).times
+        game_rotate.rotate_turns_til_winner(players)
+      end
+
+      it 'return winner' do
+        expect(game_rotate.rotate_turns_til_winner(players)).to eql(player1)
+      end
+    end
+  end
 end

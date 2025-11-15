@@ -25,4 +25,13 @@ class Game
     @board.place_choice(choice, player)
     @board.print_board
   end
+
+  def rotate_turns_til_winner(players)
+    loop do
+      players.each do |player|
+        take_turn(player)
+        return player if @board.winner?(player)
+      end 
+    end
+  end
 end
