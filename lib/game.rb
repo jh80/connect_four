@@ -9,13 +9,13 @@ class Game
     @board = Board.new
     @players = [ Player.new('player 1', '✩'), Player.new('player 2', '✭') ]
     @messages = {
-      welcome_instructions: "Let\'s play connect four!\n
-      Choose a column number 1-7 to drop your
-      player token.\nYour token will take the lowest
-      available slot in that column.\nYour goal is to
-      get four of your tokens in a row (vertically, 
-      horizontally, or diagonally) before your
-      opponent.\nLet\'s begin!",
+      intro_instructions: "Let\'s play connect four!
+      Choose a column number 1-7 to drop your player token.
+      Your token will take the lowest available slot in that column.
+      Your goal is to get four of your tokens in a row (vertically, 
+      horizontally, or diagonally) before your opponent.
+
+      Let\'s begin!",
       winner_announcement: 'has won! Congratulations!'
     }
   end
@@ -52,8 +52,8 @@ class Game
     
   def play
     puts @messages[:intro_instructions]
+    @board.print_board
     winner = rotate_turns_til_winner(@players)
-    puts winner.name
-    print @messages[:winner_announcement]
+    puts "\n#{winner.name} #{@messages[:winner_announcement]}"
   end
 end
