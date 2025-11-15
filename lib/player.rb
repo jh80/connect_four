@@ -7,15 +7,4 @@ class Player
     @name = name
     @mark = mark
   end
-
-  # Delete this if I put player_input in game
-  # 
-  # def player_input(board)
-    
-  # end
-  # private
-  # def request_choice
-  #   puts "#{@name}, enter the number of the column you would like to place your token in."
-  #   gets.chomp
-  # end
 end
