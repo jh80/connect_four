@@ -21,13 +21,13 @@ describe Game do
     let(:unavail_col) {'7'}
     let(:unavail_col_middle) {'5'}
     let(:valid_col2) {'4'}
-    let(:no_room_message) {'There is no room in this column, pick a different one'}
-    let(:not_col_message) {'This is not a column, enter and number 1-7 with no extra spaces or characters'}
+    let(:no_room_message) {game_input.instance_variable_get(:@messages)[:no_room_message]}
+    let(:not_col_message) {game_input.instance_variable_get(:@messages)[:not_col_message]}
     before do
       game_input.instance_variable_set(:@board, board)
       allow(game_input).to receive(:puts).with(player1.name + game_input.instance_variable_get(:@messages)[:turn_intro])
-      allow(game_input).to receive(:puts).with('This is not a column, enter and number 1-7 with no extra spaces or characters')
-      allow(game_input).to receive(:puts).with('There is no room in this column, pick a different one')
+      allow(game_input).to receive(:puts).with(not_col_message)
+      allow(game_input).to receive(:puts).with(no_room_message)
     end
     context 'when input is a present and available column' do
       before do

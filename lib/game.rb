@@ -17,7 +17,9 @@ class Game
 
       Let\'s begin!",
       winner_announcement: 'has won! Congratulations!',
-      turn_intro: ', please enter the number of the column you wish to place your token'
+      turn_intro: ', please enter the number of the column you wish to place your token',
+      not_col_message: 'This is not a column, enter and number 1-7 with no extra spaces or characters',
+      no_room_message: 'There is no room in this column, pick a different one' 
     }
   end
 
@@ -29,9 +31,9 @@ class Game
       is_avail = @board.available_column?(choice)
       return choice if is_column && is_avail
       if !is_column
-        puts 'This is not a column, enter and number 1-7 with no extra spaces or characters'
+        puts @messages[:not_col_message]
       else
-        puts 'There is no room in this column, pick a different one' 
+        puts @messages[:no_room_message]
       end
     end
   end
