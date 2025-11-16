@@ -16,7 +16,7 @@ class Board
   end
 
   def available_column?(choice)
-    return columns[choice][5] == blank_mark
+    return columns[choice][5] == blank_mark unless columns[choice].nil?
   end
 
   def approved_choice?(choice)
