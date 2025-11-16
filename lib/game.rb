@@ -21,7 +21,7 @@ class Game
   end
 
   def player_input(player)
-    puts "#{player.name}, please enter the number of the column you wish to place your token"
+    puts player.name + ', please enter the number of the column you wish to place your token'
     loop do
       choice = gets.chomp
       is_column = @board.valid_column?(choice)
