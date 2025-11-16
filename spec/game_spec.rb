@@ -201,15 +201,23 @@ describe Game do
   describe '#play' do
     subject(:game_play) { described_class.new }
     let(:player1) { instance_double(Player, name: 'player 1')}
+    let(:board) { instance_double(Board)}
     before do
       allow(game_play).to receive(:puts)
       allow(game_play).to receive(:print)
       allow(game_play).to receive(:rotate_turns_til_winner).and_return(player1)
       allow(player1).to receive(:name).and_return('player 1')
+      allow(board).to receive(:print_board)
       game_play.instance_variable_set(:@players, [player1, nil])
+      game_play.instance_variable_set(:@board, board)
     end
-    it 'sends message to player class to get name' do
+    it 'sends message to @players[0] to get name' do
       expect(player1).to receive(:name).once
+      game_play.play
+    end
+
+    it 'send message to @board to print' do
+      expect(board).to receive(:print_board).once
       game_play.play
     end
   end
