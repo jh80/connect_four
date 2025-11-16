@@ -25,7 +25,7 @@ describe Game do
     let(:not_col_message) {'This is not a column, enter and number 1-7 with no extra spaces or characters'}
     before do
       game_input.instance_variable_set(:@board, board)
-      allow(game_input).to receive(:puts).with("#{player1.name}, please enter the number of the column you wish to place your token")
+      allow(game_input).to receive(:puts).with(player1.name + game_input.instance_variable_get(:@messages)[:turn_intro])
       allow(game_input).to receive(:puts).with('This is not a column, enter and number 1-7 with no extra spaces or characters')
       allow(game_input).to receive(:puts).with('There is no room in this column, pick a different one')
     end

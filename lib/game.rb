@@ -16,12 +16,13 @@ class Game
       horizontally, or diagonally) before your opponent.
 
       Let\'s begin!",
-      winner_announcement: 'has won! Congratulations!'
+      winner_announcement: 'has won! Congratulations!',
+      turn_intro: ', please enter the number of the column you wish to place your token'
     }
   end
 
   def player_input(player)
-    puts player.name + ', please enter the number of the column you wish to place your token'
+    puts player.name + @messages[:turn_intro]
     loop do
       choice = gets.chomp
       is_column = @board.valid_column?(choice)
