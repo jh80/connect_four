@@ -20,8 +20,8 @@ class Game
     }
   end
 
-  def player_input
-    puts 'Please enter the number of the column you wish to place your token'
+  def player_input(player)
+    puts "#{player.name}, please enter the number of the column you wish to place your token"
     loop do
       choice = gets.chomp
       is_column = @board.valid_column?(choice)
@@ -36,7 +36,7 @@ class Game
   end
 
   def take_turn(player)
-    choice = player_input
+    choice = player_input(player)
     @board.place_choice(choice, player)
     @board.print_board
   end

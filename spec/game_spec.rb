@@ -8,6 +8,7 @@ require_relative '../lib/board'
 describe Game do
   describe '#player_input' do
     subject(:game_input) { described_class.new }
+    let(:player1) { instance_double(Player, name: 'player 1', mark: '✩')}
     let (:board) {instance_double(Board,
         columns: Hash[
           '1', Array.new(6, '❍'), '2', Array.new(6, '❍'),
@@ -24,7 +25,7 @@ describe Game do
     let(:not_col_message) {'This is not a column, enter and number 1-7 with no extra spaces or characters'}
     before do
       game_input.instance_variable_set(:@board, board)
-      allow(game_input).to receive(:puts).with('Please enter the number of the column you wish to place your token')
+      allow(game_input).to receive(:puts).with("#{player1.name}, please enter the number of the column you wish to place your token")
       allow(game_input).to receive(:puts).with('This is not a column, enter and number 1-7 with no extra spaces or characters')
       allow(game_input).to receive(:puts).with('There is no room in this column, pick a different one')
     end
@@ -36,14 +37,14 @@ describe Game do
       end
       it 'does not display not_col_message' do
         expect(game_input).not_to receive(:puts).with(not_col_message)
-        game_input.player_input
+        game_input.player_input(player1)
       end
       it 'does not display no_room_message' do
         expect(game_input).not_to receive(:puts).with(no_room_message)
-        game_input.player_input
+        game_input.player_input(player1)
       end
       it 'returns player input' do
-        expect(game_input.player_input).to eql(valid_col)
+        expect(game_input.player_input(player1)).to eql(valid_col)
       end
     end
     context 'when input is present but not available, then both' do
@@ -57,14 +58,14 @@ describe Game do
       end
       it 'displays no_room_message' do
         expect(game_input).to receive(:puts).with(no_room_message)
-        game_input.player_input
+        game_input.player_input(player1)
       end
       it 'does not display not_col message' do
         expect(game_input).not_to receive(:puts).with(not_col_message)
-        game_input.player_input
+        game_input.player_input(player1)
       end
       it 'returns valid player input' do
-        expect(game_input.player_input).to eql(valid_col2)
+        expect(game_input.player_input(player1)).to eql(valid_col2)
       end
     end
     
@@ -83,16 +84,16 @@ describe Game do
       end
       it 'displays not a column message twice' do
         expect(game_input).to receive(:puts).with(not_col_message).twice
-        game_input.player_input
+        game_input.player_input(player1)
       end
 
       it 'displays unavailable message once' do
         expect(game_input).to receive(:puts).with(no_room_message).once
-        game_input.player_input
+        game_input.player_input(player1)
       end
 
       it 'returns valid and available input' do
-        expect(game_input.player_input).to eql(valid_col)
+        expect(game_input.player_input(player1)).to eql(valid_col)
       end
     end
 
@@ -111,14 +112,14 @@ describe Game do
       end
       it 'displays not a column message once' do
         expect(game_input).to receive(:puts).with(not_col_message)
-        game_input.player_input
+        game_input.player_input(player1)
       end
       it 'displays unavailable message twice' do
         expect(game_input).to receive(:puts).with(no_room_message)
-        game_input.player_input
+        game_input.player_input(player1)
       end
       it 'returns valid and available input' do
-        expect(game_input.player_input).to eql(valid_col)
+        expect(game_input.player_input(player1)).to eql(valid_col)
       end
     end
 
@@ -133,16 +134,16 @@ describe Game do
       end
       it 'displays not a column message once' do
         expect(game_input).to receive(:puts).with(not_col_message)
-        game_input.player_input
+        game_input.player_input(player1)
       end
 
       it 'does not display no room message' do
         expect(game_input).not_to receive(:puts).with(no_room_message)
-        game_input.player_input
+        game_input.player_input(player1)
       end
 
       it 'returns valid and available input' do
-        expect(game_input.player_input).to eql(valid_col)
+        expect(game_input.player_input(player1)).to eql(valid_col)
       end
     end
   end
