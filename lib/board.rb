@@ -20,12 +20,6 @@ class Board
     false
   end
 
-  def approved_choice?(choice)
-    return false unless valid_column?(choice)
-    return false unless available_column?(choice)
-    true
-  end
-
   def place_choice(choice, player)
     for i in (0..5)
       if columns[choice][i] == '❍'
