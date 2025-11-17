@@ -177,25 +177,39 @@ describe Game do
     before do
       allow(game_rotate).to receive(:take_turn).with(player1)
       allow(game_rotate).to receive(:take_turn).with(player2)
-      allow(game_rotate.instance_variable_get(:@board)).to receive(:winner?).and_return(false, false, false, false, false, false, true)
     end
 
-    context 'when player2 took 3 turns and player1 took for 4 turns and wins' do
-      it 'calls take_turn 7 times' do
-        expect(game_rotate).to receive(:take_turn).exactly(7).times
-        game_rotate.rotate_turns_til_winner(players)
-      end
-      it 'calls take_turn with player1 4 times' do
-        expect(game_rotate).to receive(:take_turn).with(player1).exactly(4).times
-        game_rotate.rotate_turns_til_winner(players)
-      end
-      it 'calls take_turn with player2 3 times' do
-        expect(game_rotate).to receive(:take_turn).with(player2).exactly(3).times
-        game_rotate.rotate_turns_til_winner(players)
+    context 'when there is a winner' do
+      before do
+        allow(game_rotate.instance_variable_get(:@board)).to receive(:winner?).and_return(false, false, false, false, false, false, true)
       end
 
-      it 'return winner' do
-        expect(game_rotate.rotate_turns_til_winner(players)).to eql(player1)
+      context 'when player2 took 3 turns and player1 took for 4 turns and wins' do
+        it 'calls take_turn 7 times' do
+          expect(game_rotate).to receive(:take_turn).exactly(7).times
+          game_rotate.rotate_turns_til_winner(players)
+        end
+        it 'calls take_turn with player1 4 times' do
+          expect(game_rotate).to receive(:take_turn).with(player1).exactly(4).times
+          game_rotate.rotate_turns_til_winner(players)
+        end
+        it 'calls take_turn with player2 3 times' do
+          expect(game_rotate).to receive(:take_turn).with(player2).exactly(3).times
+          game_rotate.rotate_turns_til_winner(players)
+        end
+
+        it 'return winner' do
+          expect(game_rotate.rotate_turns_til_winner(players)).to eql(player1)
+        end
+      end      
+    end
+
+
+    context 'when board is full and no one has won' do
+      it 'returns false' do
+        allow(game_rotate.instance_variable_get(:@board)).to receive(:winner?).and_return(false)
+        allow(game_rotate.instance_variable_get(:@board)).to receive(:filled?).and_return(true)
+        expect(game_rotate.rotate_turns_til_winner(players)).to eql(false)
       end
     end
   end
@@ -206,20 +220,44 @@ describe Game do
     before do
       allow(game_play).to receive(:puts)
       allow(game_play).to receive(:print)
-      allow(game_play).to receive(:rotate_turns_til_winner).and_return(player1)
-      allow(player1).to receive(:name).and_return('player 1')
       allow(board).to receive(:print_board)
       game_play.instance_variable_set(:@players, [player1, nil])
       game_play.instance_variable_set(:@board, board)
     end
-    it 'sends message to @players[0] to get name' do
-      expect(player1).to receive(:name).once
-      game_play.play
+    context 'when player 1 wins' do
+      before do
+        allow(game_play).to receive(:rotate_turns_til_winner).and_return(player1)
+        allow(player1).to receive(:name).and_return('player 1')
+      end
+      it 'sends message to @players[0] to get name' do
+        expect(player1).to receive(:name).once
+        game_play.play
+      end
+
+      it 'send message to @board to print' do
+        expect(board).to receive(:print_board).once
+        game_play.play
+      end    
+      
+      it 'does not display full board message' do
+        expect(game_play).not_to receive(:puts).with(game_play.instance_variable_get(:@messages)[:no_winner_message])
+        game_play.play
+      end
+
+      it 'does display winner message' do
+        expect(game_play).to receive(:puts).with( "\n#{player1.name} #{game_play.instance_variable_get(:@messages)[:winner_announcement]}" )
+        game_play.play
+      end
     end
 
-    it 'send message to @board to print' do
-      expect(board).to receive(:print_board).once
-      game_play.play
+    context 'when game board is full' do
+      before do
+        allow(game_play).to receive(:rotate_turns_til_winner).and_return(false)
+      end
+      it 'ends game and displays message that board is full' do
+        expect(game_play).to receive(:puts).with(game_play.instance_variable_get(:@messages)[:no_winner_message])
+        game_play.play
+      end
     end
   end
 end

@@ -19,7 +19,8 @@ class Game
       winner_announcement: 'has won! Congratulations!',
       turn_intro: ', please enter the number of the column you wish to place your token',
       not_col_message: 'This is not a column, enter and number 1-7 with no extra spaces or characters',
-      no_room_message: 'There is no room in this column, pick a different one' 
+      no_room_message: 'There is no room in this column, pick a different one',
+      no_winner_message: 'The board is full and no one has won, we can call is a tie!' 
     }
   end
 
@@ -49,6 +50,7 @@ class Game
       players.each do |player|
         take_turn(player)
         return player if @board.winner?(player)
+        return false if @board.filled?
       end 
     end
   end
@@ -57,6 +59,10 @@ class Game
     puts @messages[:intro_instructions]
     @board.print_board
     winner = rotate_turns_til_winner(@players)
-    puts "\n#{winner.name} #{@messages[:winner_announcement]}"
+    if winner
+      puts "\n#{winner.name} #{@messages[:winner_announcement]}"
+    else
+      puts @messages[:no_winner_message]
+    end
   end
 end
