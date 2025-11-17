@@ -204,7 +204,6 @@ describe Game do
       end      
     end
 
-
     context 'when board is full and no one has won' do
       it 'returns false' do
         allow(game_rotate.instance_variable_get(:@board)).to receive(:winner?).and_return(false)
